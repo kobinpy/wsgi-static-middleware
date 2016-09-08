@@ -31,7 +31,7 @@ def get_body(filename, method):
 class StaticMiddleware:
     default_charset = 'UTF-8'
 
-    def __init__(self, app, static_root, static_dirs, download):
+    def __init__(self, app, static_root, static_dirs, download=''):
         self.app = app
         self.static_root = static_root
         self.static_dirs = static_dirs
@@ -39,7 +39,6 @@ class StaticMiddleware:
 
     def __call__(self, env, start_response):
         path = env['PATH_INFO'].lstrip('/')
-        import pdb; pdb.set_trace()
         if path.startswith(self.static_root):
             relative_file_path = '/'.join(path.split('/')[1:])
             return self.handle(env, start_response, relative_file_path)

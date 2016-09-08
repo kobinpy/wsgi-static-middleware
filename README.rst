@@ -26,6 +26,15 @@ Usage
        httpd = make_server('', 8000, app)
        httpd.serve_forever()
 
+
+.. code-block:: bash
+
+   $ curl localhost:8000/static/style.css
+   .foo {
+       font-size: 10px;
+   }
+
+
 LICENSE
 -------
 
