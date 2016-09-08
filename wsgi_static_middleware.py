@@ -29,6 +29,8 @@ def get_body(filename, method):
 
 
 class StaticMiddleware:
+    default_charset = 'UTF-8'
+
     def __init__(self, app, static_root, static_dirs, download):
         self.app = app
         self.static_root = static_root
@@ -59,7 +61,7 @@ class StaticMiddleware:
         else:
             return http404(env, start_response)
 
-    def static_file_view(self, env, start_response, filename, charset='UTF-8'):
+    def static_file_view(self, env, start_response, filename):
         method = env['REQUEST_METHOD'].upper()
         headers = Headers()
 
@@ -67,9 +69,9 @@ class StaticMiddleware:
         if encoding:
             headers.add_header('Content-Encodings', encoding)
         if mimetype:
-            if ((mimetype[:5] == 'text/' or mimetype == 'application/javascript') and
-                    charset and 'charset' not in mimetype):
-                mimetype += '; charset={}'.format(charset)
+            if ((mimetype.startswith('text/') or mimetype == 'application/javascript')
+                    and 'charset' not in mimetype):
+                mimetype += '; charset={}'.format(self.default_charset)
             headers.add_header('Content-Type', mimetype)
 
         headers.add_header(*get_content_length(filename))
