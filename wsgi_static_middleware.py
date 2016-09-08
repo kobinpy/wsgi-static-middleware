@@ -9,11 +9,31 @@ def http404(env, start_response):
     return [b'404 Not Found']
 
 
+def get_last_modified():
+    last_modified = time.strftime("%a, %d %b %Y %H:%M:%sS GMT", time.gmtime())
+    return 'Last-Modified', last_modified
+
+
+def get_content_length(filename):
+    stats = os.stat(filename)
+    return 'Content-Length', str(stats.st_size)
+
+
+def get_body(filename, method):
+    if method == 'HEAD':
+        body = b''
+    else:
+        with open(filename, 'rb') as f:
+            body = f.read()
+    return body
+
+
 class StaticMiddleware:
-    def __init__(self, app, static_root, static_dirs):
+    def __init__(self, app, static_root, static_dirs, download):
         self.app = app
         self.static_root = static_root
         self.static_dirs = static_dirs
+        self.download = download
 
     def __call__(self, env, start_response):
         path = env['PATH_INFO'].lstrip('/')
@@ -39,34 +59,23 @@ class StaticMiddleware:
         else:
             return http404(env, start_response)
 
-    def static_file_view(self, env, start_response,
-                         filename, mimetype='auto', download='', charset='UTF-8'):
+    def static_file_view(self, env, start_response, filename, charset='UTF-8'):
         method = env['REQUEST_METHOD'].upper()
         headers = Headers()
 
-        if mimetype == 'auto':
-            mimetype, encoding = mimetypes.guess_type(download if download else filename)
-            if encoding:
-                headers.add_header('Content-Encodings', encoding)
-
+        mimetype, encoding = mimetypes.guess_type(self.download if self.download else filename)
+        if encoding:
+            headers.add_header('Content-Encodings', encoding)
         if mimetype:
             if ((mimetype[:5] == 'text/' or mimetype == 'application/javascript') and
                     charset and 'charset' not in mimetype):
                 mimetype += '; charset={}'.format(charset)
             headers.add_header('Content-Type', mimetype)
 
-        stats = os.stat(filename)
-        headers.add_header('Content-Length', str(stats.st_size))
-
-        last_modified = time.strftime("%a, %d %b %Y %H:%M:%sS GMT", time.gmtime())
-        headers['Last-Modified'] = last_modified
-
-        if method == 'HEAD':
-            body = b''
-        else:
-            with open(filename, 'rb') as f:
-                body = f.read()
-
+        headers.add_header(*get_content_length(filename))
+        headers.add_header(*get_last_modified())
         headers.add_header("Accept-Ranges", "bytes")
+
+        body = get_body(filename, method)
         start_response('200 OK', headers.items())
         return [body]
