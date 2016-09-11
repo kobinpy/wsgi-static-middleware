@@ -73,17 +73,20 @@ def static_file_view(env, start_response, filename, block_size, charset):
     headers.add_header("Accept-Ranges", "bytes")
 
     start_response('200 OK', headers.items())
-    return _get_body(filename, env['REQUEST_METHOD'].upper(), block_size, charset)
+    return _get_body(filename, env['REQUEST_METHOD'].upper(),
+                     block_size, charset)
 
 
 def http404(env, start_response):
-    start_response('404 Not Found', [('Content-type', 'text/plain; charset=utf-8')])
+    start_response('404 Not Found',
+                   [('Content-type', 'text/plain; charset=utf-8')])
     return [b'404 Not Found']
 
 
 # Middleware class
 class StaticMiddleware:
-    def __init__(self, app, static_root, static_dirs, block_size=16*4096, charset='UTF-8'):
+    def __init__(self, app, static_root, static_dirs,
+                 block_size=16*4096, charset='UTF-8'):
         self.app = app
         self.static_root = static_root
         self.static_dirs = static_dirs

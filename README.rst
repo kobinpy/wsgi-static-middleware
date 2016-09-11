@@ -1,6 +1,12 @@
 wsgi-static-middleware
 ======================
 
+.. image:: https://travis-ci.org/c-bata/wsgi-static-middleware.svg?branch=master
+    :target: https://travis-ci.org/c-bata/wsgi-static-middleware
+
+.. image:: https://badge.fury.io/py/wsgi-static-middleware.svg
+    :target: https://badge.fury.io/py/wsgi-static-middleware
+
 WSGI Middleware for serving static files.
 
 Usage
