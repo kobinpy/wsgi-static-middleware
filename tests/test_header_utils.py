@@ -5,7 +5,6 @@ import mimetypes
 from wsgi_static_middleware import (
     get_content_length,
     get_content_type,
-    get_body,
 )
 
 STATIC_DIR = os.path.join(os.path.dirname(__file__), 'static')
@@ -37,16 +36,4 @@ class HeaderUtilsTests(TestCase):
         mimetype, encoding = mimetypes.guess_type(file_path)
         actual = get_content_type(mimetype, charset='UTF-8')
         expected = 'image/png'
-        self.assertEqual(actual, expected)
-
-    def test_get_body_returns_empty_body_when_catch_head_request(self):
-        file_path = os.path.join(STATIC_DIR, 'style.css')
-        actual = get_body(file_path, method='HEAD')
-        expected = b''
-        self.assertEqual(actual, expected)
-
-    def test_get_body(self):
-        file_path = os.path.join(STATIC_DIR, 'app.js')
-        actual = get_body(file_path, method='GET')
-        expected = b"console.log('Hello World');\n"
         self.assertEqual(actual, expected)

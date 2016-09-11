@@ -40,18 +40,29 @@ def get_content_type(mimetype, charset):
     return mimetype
 
 
-def get_body(filename, method):
+# Response body iterator
+def _iter_and_close(file_obj, block_size, charset):
+    """Yield file contents by block then close the file."""
+    while True:
+        try:
+            block = file_obj.read(block_size)
+            if block:
+                yield block.encode(charset)
+            else:
+                raise StopIteration
+        except StopIteration:
+            file_obj.close()
+            break
+
+
+def _get_body(filename, method, block_size, charset):
     if method == 'HEAD':
-        body = b''
-    else:
-        with open(filename, 'rb') as f:
-            body = f.read()
-    return body
+        return [b'']
+    return _iter_and_close(open(filename), block_size, charset)
 
 
 # View functions
-def static_file_view(env, start_response, filename, charset):
-    method = env['REQUEST_METHOD'].upper()
+def static_file_view(env, start_response, filename, block_size, charset):
     headers = Headers()
 
     mimetype, encoding = mimetypes.guess_type(filename)
@@ -61,9 +72,8 @@ def static_file_view(env, start_response, filename, charset):
     headers.add_header('Last-Modified', generate_last_modified())
     headers.add_header("Accept-Ranges", "bytes")
 
-    body = get_body(filename, method)
     start_response('200 OK', headers.items())
-    return [body]
+    return _get_body(filename, env['REQUEST_METHOD'].upper(), block_size, charset)
 
 
 def http404(env, start_response):
@@ -73,11 +83,12 @@ def http404(env, start_response):
 
 # Middleware class
 class StaticMiddleware:
-    def __init__(self, app, static_root, static_dirs, charset='UTF-8'):
+    def __init__(self, app, static_root, static_dirs, block_size=16*4096, charset='UTF-8'):
         self.app = app
         self.static_root = static_root
         self.static_dirs = static_dirs
         self.charset = charset
+        self.block_size = block_size
 
     def __call__(self, env, start_response):
         path = env['PATH_INFO'].lstrip('/')
@@ -89,6 +100,7 @@ class StaticMiddleware:
     def handle(self, env, start_response, filename):
         abs_file_path = search_file(filename, self.static_dirs)
         if abs_file_path:
-            return static_file_view(env, start_response, abs_file_path, self.charset)
+            return static_file_view(env, start_response, abs_file_path,
+                                    self.block_size, self.charset)
         else:
             return http404(env, start_response)
