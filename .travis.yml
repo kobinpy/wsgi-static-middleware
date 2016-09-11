@@ -11,6 +11,6 @@ env:
   - TOXENV=py35
   - TOXENV=flake8
 install:
-  - travis_retry pip install -q tox
+  - pip install -q tox
 script:
   - tox
