@@ -29,10 +29,30 @@ Usage
 
 .. code-block:: bash
 
-   $ curl localhost:8000/static/style.css
+   $ curl -v localhost:8000/static/style.css
+   *   Trying ::1...
+   * connect to ::1 port 8000 failed: Connection refused
+   *   Trying 127.0.0.1...
+   * Connected to localhost (127.0.0.1) port 8000 (#0)
+   > GET /static/style.css HTTP/1.1
+   > Host: localhost:8000
+   > User-Agent: curl/7.43.0
+   > Accept: */*
+   >
+   * HTTP 1.0, assume close after body
+   < HTTP/1.0 200 OK
+   < Date: Sun, 11 Sep 2016 03:42:33 GMT
+   < Server: WSGIServer/0.2 CPython/3.5.1
+   < Content-Encodings:
+   < Content-Type: text/css; charset=UTF-8
+   < Content-Length: 30
+   < Last-Modified: Sun, 11 Sep 2016 03:42:1473532953S GMT
+   < Accept-Ranges: bytes
+   <
    .foo {
        font-size: 10px;
    }
+   * Closing connection 0
 
 
 LICENSE
