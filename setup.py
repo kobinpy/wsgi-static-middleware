@@ -26,7 +26,7 @@ setup(
     author=__author__,
     author_email=__author_email__,
     url='https://github.com/c-bata/wsgi-static-middleware',
-    description='Basic static file serving middleware for WSGI',
+    description='WSGI Middleware for serving static files',
     long_description=README,
     classifiers=__classifiers__,
     py_modules=['wsgi_static_middleware'],
