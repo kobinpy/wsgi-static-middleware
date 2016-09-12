@@ -88,7 +88,7 @@ class StaticMiddleware:
     def __init__(self, app, static_root, static_dirs,
                  block_size=16*4096, charset='UTF-8'):
         self.app = app
-        self.static_root = static_root
+        self.static_root = static_root.lstrip('/').rstrip('/')
         self.static_dirs = static_dirs
         self.charset = charset
         self.block_size = block_size
