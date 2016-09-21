@@ -85,10 +85,12 @@ def http404(env, start_response):
 
 # Middleware class
 class StaticMiddleware:
-    def __init__(self, app, static_root, static_dirs,
+    def __init__(self, app, static_root, static_dirs=None,
                  block_size=16*4096, charset='UTF-8'):
         self.app = app
         self.static_root = static_root.lstrip('/').rstrip('/')
+        if static_dirs is None:
+            static_dirs = [os.path.join(os.path.abspath('.'), 'templates')]
         self.static_dirs = static_dirs
         self.charset = charset
         self.block_size = block_size
