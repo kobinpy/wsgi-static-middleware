@@ -63,7 +63,7 @@ def _get_body(filename, method, block_size, charset):
 
 # View functions
 def static_file_view(env, start_response, filename, block_size, charset):
-    headers = Headers()
+    headers = Headers([])
 
     mimetype, encoding = mimetypes.guess_type(filename)
     headers.add_header('Content-Encodings', encoding)
