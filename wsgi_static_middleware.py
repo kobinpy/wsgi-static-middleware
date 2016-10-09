@@ -90,7 +90,7 @@ class StaticMiddleware:
         self.app = app
         self.static_root = static_root.lstrip('/').rstrip('/')
         if static_dirs is None:
-            static_dirs = [os.path.join(os.path.abspath('.'), 'templates')]
+            static_dirs = [os.path.join(os.path.abspath('.'), 'static')]
         self.static_dirs = static_dirs
         self.charset = charset
         self.block_size = block_size
