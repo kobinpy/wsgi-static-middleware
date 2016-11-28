@@ -104,7 +104,7 @@ class StaticMiddleware:
 
     def run(self, *args, **kwargs):
         # For Bottle applications.
-        return self.app.run(*args, **kwargs)
+        return self(*args, **kwargs)
 
     def handle(self, env, start_response, filename):
         abs_file_path = search_file(filename, self.static_dirs)
