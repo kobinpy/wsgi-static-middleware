@@ -25,7 +25,7 @@ setup(
     version=__version__,
     author=__author__,
     author_email=__author_email__,
-    url='https://github.com/c-bata/wsgi-static-middleware',
+    url='https://github.com/kobinpy/wsgi-static-middleware',
     description='WSGI Middleware for serving static files',
     long_description=README,
     classifiers=__classifiers__,

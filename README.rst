@@ -1,8 +1,8 @@
 wsgi-static-middleware
 ======================
 
-.. image:: https://travis-ci.org/c-bata/wsgi-static-middleware.svg?branch=master
-    :target: https://travis-ci.org/c-bata/wsgi-static-middleware
+.. image:: https://travis-ci.org/kobinpy/wsgi-static-middleware.svg?branch=master
+    :target: https://travis-ci.org/kobinpy/wsgi-static-middleware
 
 .. image:: https://badge.fury.io/py/wsgi-static-middleware.svg
     :target: https://badge.fury.io/py/wsgi-static-middleware
