@@ -47,7 +47,10 @@ def _iter_and_close(file_obj, block_size, charset):
         try:
             block = file_obj.read(block_size)
             if block:
-                yield block.encode(charset)
+                if isinstance(block, bytes):
+                    yield block
+                else:
+                    yield block.encode(charset)
             else:
                 raise StopIteration
         except StopIteration:
