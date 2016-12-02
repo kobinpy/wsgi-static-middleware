@@ -4,12 +4,12 @@ from setuptools import setup
 BASE_PATH = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(BASE_PATH, 'README.rst')).read()
 
-__version__ = '0.0.8'
+__version__ = '0.1.0'
 __author__ = 'Masashi Shibata <contact@c-bata.link>'
 __author_email__ = 'contact@c-bata.link'
 __license__ = 'MIT License'
 __classifiers__ = (
-    'Development Status :: 2 - Pre-Alpha',
+    'Development Status :: 3 - Alpha',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: MIT License',
     'Topic :: Internet :: WWW/HTTP :: WSGI',
