@@ -68,7 +68,8 @@ def _get_body(filename, method, block_size, charset):
 def static_file_view(env, start_response, filename, block_size, charset):
     method = env['REQUEST_METHOD'].upper()
     if method not in ('HEAD', 'GET'):
-        start_response('405 METHOD NOT ALLOWED', [('Content-Type', 'text/plain; UTF-8')])
+        start_response('405 METHOD NOT ALLOWED',
+                       [('Content-Type', 'text/plain; UTF-8')])
         return [b'']
 
     mimetype, encoding = mimetypes.guess_type(filename)
