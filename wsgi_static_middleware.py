@@ -61,7 +61,7 @@ def _iter_and_close(file_obj, block_size, charset):
 def _get_body(filename, method, block_size, charset):
     if method == 'HEAD':
         return [b'']
-    return _iter_and_close(open(filename), block_size, charset)
+    return _iter_and_close(open(filename, 'rb'), block_size, charset)
 
 
 # View functions
